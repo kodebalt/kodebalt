@@ -1,132 +1,133 @@
-const CF_APP_VERSION = '1.0.0'
+const CF_APP_VERSION = '1.0.0';
 
-const logtailApiURL = "https://in.logs.betterstack.com/";
+const logtailApiURL = 'https://in.logs.betterstack.com/';
+let sourceToken;
 
 export function onRequest(context) {
-   sourceToken = context.env.SOURCE_TOKEN;
+  sourceToken = context.env.SOURCE_TOKEN;
 }
 
 const headers = [
-  "rMeth",
-  "rUrl",
-  "uAgent",
-  "cfRay",
-  "cIP",
-  "statusCode",
-  "contentLength",
-  "cfCacheStatus",
-  "contentType",
-  "responseConnection",
-  "requestConnection",
-  "cacheControl",
-  "acceptRanges",
-  "expectCt",
-  "expires",
-  "lastModified",
-  "vary",
-  "server",
-  "etag",
-  "date",
-  "transferEncoding",
-]
+  'rMeth',
+  'rUrl',
+  'uAgent',
+  'cfRay',
+  'cIP',
+  'statusCode',
+  'contentLength',
+  'cfCacheStatus',
+  'contentType',
+  'responseConnection',
+  'requestConnection',
+  'cacheControl',
+  'acceptRanges',
+  'expectCt',
+  'expires',
+  'lastModified',
+  'vary',
+  'server',
+  'etag',
+  'date',
+  'transferEncoding',
+];
 
 const options = {
-  metadata: headers.map(value => ({ field: value })),
-}
+  metadata: headers.map((value) => ({ field: value })),
+};
 
-const sleep = ms => {
-  return new Promise(resolve => {
-    setTimeout(resolve, ms)
-  })
-}
+const sleep = (ms) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+};
 
-const makeid = length => {
-  let text = ""
-  const possible = "ABCDEFGHIJKLMNPQRSTUVWXYZ0123456789"
+const makeid = (length) => {
+  let text = '';
+  const possible = 'ABCDEFGHIJKLMNPQRSTUVWXYZ0123456789';
   for (let i = 0; i < length; i += 1) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length))
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
-  return text
-}
+  return text;
+};
 
 const buildLogMessage = (request, response) => {
   const logDefs = {
     rMeth: request.method,
     rUrl: request.url,
-    uAgent: request.headers.get("user-agent"),
-    cfRay: request.headers.get("cf-ray"),
-    cIP: request.headers.get("cf-connecting-ip"),
+    uAgent: request.headers.get('user-agent'),
+    cfRay: request.headers.get('cf-ray'),
+    cIP: request.headers.get('cf-connecting-ip'),
     statusCode: response.status,
-    contentLength: response.headers.get("content-length"),
-    cfCacheStatus: response.headers.get("cf-cache-status"),
-    contentType: response.headers.get("content-type"),
-    responseConnection: response.headers.get("connection"),
-    requestConnection: request.headers.get("connection"),
-    cacheControl: response.headers.get("cache-control"),
-    acceptRanges: response.headers.get("accept-ranges"),
-    expectCt: response.headers.get("expect-ct"),
-    expires: response.headers.get("expires"),
-    lastModified: response.headers.get("last-modified"),
-    vary: response.headers.get("vary"),
-    server: response.headers.get("server"),
-    etag: response.headers.get("etag"),
-    date: response.headers.get("date"),
-    transferEncoding: response.headers.get("transfer-encoding"),
-  }
+    contentLength: response.headers.get('content-length'),
+    cfCacheStatus: response.headers.get('cf-cache-status'),
+    contentType: response.headers.get('content-type'),
+    responseConnection: response.headers.get('connection'),
+    requestConnection: request.headers.get('connection'),
+    cacheControl: response.headers.get('cache-control'),
+    acceptRanges: response.headers.get('accept-ranges'),
+    expectCt: response.headers.get('expect-ct'),
+    expires: response.headers.get('expires'),
+    lastModified: response.headers.get('last-modified'),
+    vary: response.headers.get('vary'),
+    server: response.headers.get('server'),
+    etag: response.headers.get('etag'),
+    date: response.headers.get('date'),
+    transferEncoding: response.headers.get('transfer-encoding'),
+  };
 
-  const logArray = []
-  options.metadata.forEach(entry => logArray.push(logDefs[entry.field]))
-  return logArray.join(" | ")
-}
+  const logArray = [];
+  options.metadata.forEach((entry) => logArray.push(logDefs[entry.field]));
+  return logArray.join(' | ');
+};
 
-const buildMetadataFromHeaders = headers => {
-  const responseMetadata = {}
+const buildMetadataFromHeaders = (headers) => {
+  const responseMetadata = {};
   Array.from(headers).forEach(([key, value]) => {
-    responseMetadata[key.replace(/-/g, "_")] = value
-  })
-  return responseMetadata
-}
+    responseMetadata[key.replace(/-/g, '_')] = value;
+  });
+  return responseMetadata;
+};
 
 // Batching
-const BATCH_INTERVAL_MS = 500
-const MAX_REQUESTS_PER_BATCH = 100
-const WORKER_ID = makeid(6)
+const BATCH_INTERVAL_MS = 500;
+const MAX_REQUESTS_PER_BATCH = 100;
+const WORKER_ID = makeid(6);
 
-let workerTimestamp
+let workerTimestamp;
 
-let batchTimeoutReached = true
-let logEventsBatch = []
+let batchTimeoutReached = true;
+let logEventsBatch = [];
 
 // Backoff
-const BACKOFF_INTERVAL = 10000
-let backoff = 0
+const BACKOFF_INTERVAL = 10000;
+let backoff = 0;
 
 async function addToBatch(body, connectingIp, event) {
-  logEventsBatch.push(body)
+  logEventsBatch.push(body);
 
   if (logEventsBatch.length >= MAX_REQUESTS_PER_BATCH) {
-    event.waitUntil(postBatch(event))
+    event.waitUntil(postBatch(event));
   }
 
-  return true
+  return true;
 }
 
 async function handleRequest(event) {
-  const { request } = event
+  const { request } = event;
 
-  const requestMetadata = buildMetadataFromHeaders(request.headers)
+  const requestMetadata = buildMetadataFromHeaders(request.headers);
 
-  const t1 = Date.now()
-  const response = await fetch(request)
-  const originTimeMs = Date.now() - t1
+  const t1 = Date.now();
+  const response = await fetch(request);
+  const originTimeMs = Date.now() - t1;
 
-  const rUrl = request.url
-  const rMeth = request.method
-  const rCf = request.cf
-  delete rCf.tlsClientAuth
-  delete rCf.tlsExportedAuthenticator
+  const rUrl = request.url;
+  const rMeth = request.method;
+  const rCf = request.cf;
+  delete rCf.tlsClientAuth;
+  delete rCf.tlsExportedAuthenticator;
 
-  const responseMetadata = buildMetadataFromHeaders(response.headers)
+  const responseMetadata = buildMetadataFromHeaders(response.headers);
 
   const eventBody = {
     message: buildLogMessage(request, response),
@@ -149,63 +150,66 @@ async function handleRequest(event) {
         worker_started: workerTimestamp,
       },
     },
-  }
+  };
   event.waitUntil(
-    addToBatch(eventBody, requestMetadata.cf_connecting_ip, event),
-  )
+    addToBatch(eventBody, requestMetadata.cf_connecting_ip, event)
+  );
 
-  return response
+  return response;
 }
 
 const fetchAndSetBackOff = async (lfRequest, event) => {
   if (backoff <= Date.now()) {
-    const resp = await fetch(logtailApiURL, lfRequest)
+    const resp = await fetch(logtailApiURL, lfRequest);
     if (resp.status === 403 || resp.status === 429) {
-      backoff = Date.now() + BACKOFF_INTERVAL
+      backoff = Date.now() + BACKOFF_INTERVAL;
     }
   }
 
-  event.waitUntil(scheduleBatch(event))
+  event.waitUntil(scheduleBatch(event));
 
-  return true
-}
+  return true;
+};
 
-const postBatch = async event => {
-  const batchInFlight = [...logEventsBatch]
-  logEventsBatch = []
-  const rHost = batchInFlight[0].metadata.request.headers.host
-  const body = JSON.stringify(batchInFlight)
+const postBatch = async (event) => {
+  const batchInFlight = [...logEventsBatch];
+  logEventsBatch = [];
+  const rHost = batchInFlight[0].metadata.request.headers.host;
+  const body = JSON.stringify(batchInFlight);
+  if (typeof sourceToken === 'undefined') {
+    throw new Error('sourceToken has not been initialized.');
+  }
   const request = {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Authorization": `Bearer ${sourceToken}`,
-      "Content-Type": "application/json",
-      "User-Agent": `Cloudflare Worker via ${rHost}`,
+      Authorization: `Bearer ${sourceToken}`,
+      'Content-Type': 'application/json',
+      'User-Agent': `Cloudflare Worker via ${rHost}`,
     },
     body,
-  }
-  event.waitUntil(fetchAndSetBackOff(request, event))
-}
+  };
+  event.waitUntil(fetchAndSetBackOff(request, event));
+};
 
-const scheduleBatch = async event => {
+const scheduleBatch = async (event) => {
   if (batchTimeoutReached) {
-    batchTimeoutReached = false
-    await sleep(BATCH_INTERVAL_MS)
+    batchTimeoutReached = false;
+    await sleep(BATCH_INTERVAL_MS);
     if (logEventsBatch.length > 0) {
-      event.waitUntil(postBatch(event))
+      event.waitUntil(postBatch(event));
     }
-    batchTimeoutReached = true
+    batchTimeoutReached = true;
   }
-  return true
-}
+  return true;
+};
 
-addEventListener("fetch", event => {
-  event.passThroughOnException()
+addEventListener('fetch', (event) => {
+  event.passThroughOnException();
 
   if (!workerTimestamp) {
-    workerTimestamp = new Date().toISOString()
+    workerTimestamp = new Date().toISOString();
   }
 
-  event.waitUntil(scheduleBatch(event))
-  event.respondWith(handleRequest(event))
-})
+  event.waitUntil(scheduleBatch(event));
+  event.respondWith(handleRequest(event));
+});
