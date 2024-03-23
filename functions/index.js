@@ -3,10 +3,6 @@ const CF_APP_VERSION = '1.0.0';
 const logtailApiURL = 'https://in.logs.betterstack.com/';
 let sourceToken;
 
-export function onRequest(context) {
-  sourceToken = context.env.SOURCE_TOKEN;
-}
-
 const headers = [
   'rMeth',
   'rUrl',
@@ -203,13 +199,20 @@ const scheduleBatch = async (event) => {
   return true;
 };
 
-addEventListener('fetch', (event) => {
-  event.passThroughOnException();
+export async function onRequest(event) {
+  try {
+    event.passThroughOnException();
 
-  if (!workerTimestamp) {
-    workerTimestamp = new Date().toISOString();
+    let workerTimestamp;
+    if (!workerTimestamp) {
+      workerTimestamp = new Date().toISOString();
+    }
+
+    sourceToken = event.env.SOURCE_TOKEN;
+    await scheduleBatch(event);
+    return await handleRequest(event);
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return new Response('An error occurred: ' + error, { status: 500 });
   }
-
-  event.waitUntil(scheduleBatch(event));
-  event.respondWith(handleRequest(event));
-});
+}
