@@ -1,7 +1,6 @@
 const CF_APP_VERSION = '1.0.0'
 
 const logtailApiURL = "https://in.logs.betterstack.com/";
-const sourceToken = "";
 
 export function onRequest(context) {
    sourceToken = context.env.SOURCE_TOKEN;
