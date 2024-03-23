@@ -203,7 +203,6 @@ export async function onRequest(event) {
   try {
     event.passThroughOnException();
 
-    let workerTimestamp;
     if (!workerTimestamp) {
       workerTimestamp = new Date().toISOString();
     }
