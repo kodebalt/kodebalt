@@ -4,10 +4,10 @@
     <meta charset="utf-8" />
     <title>Page Not Found</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="icon" type="image/png" href="favicon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="manifest" href="site.webmanifest" />
     <meta name="application-name" content="Kodebalt" />
     <meta name="theme-color" content="#FFFFFF" />
@@ -16,10 +16,7 @@
     <link rel="mask-icon" href="safari-pinned-tab.svg" color="#FF5722" />
     <meta name="apple-mobile-web-app-title" content="Kodebalt" />
     <meta name="msapplication-TileColor" content="#FF5722" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;700&display=swap"
-    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;700&display=swap" />
     <style>
       body {
         background-color: #212121;
@@ -92,9 +89,7 @@
       <div>
         <h1 id="header" class="text hidetext">Page Not Found</h1>
         <div id="subheaderContainer">
-          <p id="subheader" class="text hidetext">
-            Sorry, but the page you were trying to view does not exist, yet...
-          </p>
+          <p id="subheader" class="text hidetext">Sorry, but the page you were trying to view does not exist, yet...</p>
         </div>
       </div>
     </div>
@@ -132,12 +127,8 @@
           document.getElementById('copyright').classList.add('copyrightMobile');
         } else {
           document.getElementById('header').classList.remove('headerMobile');
-          document
-            .getElementById('subheader')
-            .classList.remove('subheaderMobile');
-          document
-            .getElementById('copyright')
-            .classList.remove('copyrightMobile');
+          document.getElementById('subheader').classList.remove('subheaderMobile');
+          document.getElementById('copyright').classList.remove('copyrightMobile');
         }
       }
 
