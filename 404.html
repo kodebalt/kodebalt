@@ -19,6 +19,19 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;500;700&display=swap" />
     <link rel="stylesheet" href="/assets/css/styles.css" />
     <style>
+      #text404 {
+        text-align: center;
+        text-align-last: initial;
+        line-height: initial;
+        font-style: italic;
+        padding-top: 1vh;
+        font-size: 1.2cqw;
+      }
+
+      .subheaderMobile #text404 {
+        font-size: 2.16cqw !important;
+      }
+
       /* Button */
       .material-btn {
         position: relative;
@@ -104,12 +117,7 @@
         <h1 id="header" class="text hidetext">Page Not Found</h1>
         <div id="subheaderContainer">
           <p class="text hidetext">Sorry, but the page you were trying to view does not actually exist.</p>
-          <p
-            class="text hidetext"
-            style="text-align: center; text-align-last: initial; line-height: initial; font-style: italic; padding-top: 1vh"
-          >
-            Error 404
-          </p>
+          <p id="text404" class="text hidetext">Error 404</p>
           <div style="padding-top: 2.5vh"><a class="material-btn filled" href="/">Home</a></div>
         </div>
       </div>
