@@ -25,116 +25,66 @@
         line-height: initial;
         font-style: italic;
         padding-top: 1vh;
-        font-size: 1.2cqw;
+        font-size: 1.5cqw;
       }
 
       .subheaderMobile #text404 {
         font-size: 2.16cqw !important;
       }
 
-      /* Button */
-      .material-btn {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        min-height: 44px;
-        min-width: 44px;
-        padding: 0 26px;
-        margin: 5px;
-        border-radius: 22px;
-        background: none;
-        color: #ffb49d;
-        overflow: hidden;
-        cursor: pointer;
-        transition: all 0.15s ease;
-        border: 1px solid transparent;
-        font-size: 1rem;
-        line-height: 1;
-        text-decoration: initial;
-        font-family: Outfit;
-        font-weight: 500;
-      }
-
-      .material-btn:hover,
-      .material-btn:focus {
-        background-color: rgba(255, 180, 157, 0.1);
-      }
-
-      .material-btn::before {
-        background-color: #ffb49d;
-      }
-
-      .material-btn:focus-visible {
-        outline: 4px solid blue;
-        outline-offset: 3px;
-      }
-
-      .material-btn + .material-btn {
-        margin-left: 10px;
-      }
-
-      .filled {
-        background: #ffb49d;
-        color: #601400;
-      }
-
-      .filled:hover,
-      .filled:focus {
-        background-color: rgba(255, 180, 157, 0.8);
-      }
-
-      .filled::before {
-        background-color: #601400;
-      }
-
-      .ripple::before {
-        content: '';
-        position: absolute;
-        left: var(--x);
-        top: var(--y);
-        width: 200%;
-        border-radius: 50%;
-        opacity: 0.25;
-        aspect-ratio: 1;
-        transform: translate(-50%, -50%) scale(0);
-        transform-origin: center center;
-        animation: ripples 0.45s ease-out;
-      }
-
-      @keyframes ripples {
-        to {
-          transform: translate(-50%, -50%) scale(1);
-          opacity: 0;
+      /* Styles for phones */
+      @media only screen and (max-width: 480px) {
+        #button {
+          transform: initial;
         }
       }
-      /* Button END */
+
+      /* Styles for landscape-oriented phones */
+      @media only screen and (min-width: 481px) and (max-width: 767px) {
+        #button {
+          transform: initial;
+        }
+      }
+
+      /* Styles for portrait-oriented tablets and small desktops */
+      @media only screen and (min-width: 768px) and (max-width: 1023px) {
+        #button {
+          transform: scale(1.125);
+        }
+      }
+
+      /* Styles for regular desktops and laptops */
+      @media only screen and (min-width: 1024px) and (max-width: 1279px) {
+        #button {
+          transform: scale(1.25);
+        }
+      }
+
+      /* Styles for large desktops and high-resolution screens */
+      @media only screen and (min-width: 1280px) {
+        #button {
+          transform: scale(1.5);
+        }
+      }
     </style>
   </head>
 
   <body>
-    <div id="centered" class="box">
-      <div>
+    <div id="centered">
+      <div class="box">
         <h1 id="header" class="text hidetext">Page Not Found</h1>
         <div id="subheaderContainer">
           <p class="text hidetext">Sorry, but the page you were trying to view does not actually exist.</p>
           <p id="text404" class="text hidetext">Error 404</p>
-          <div style="padding-top: 2.5vh"><a class="material-btn filled" href="/">Home</a></div>
+          <div style="padding-top: 2.5vh">
+            <!-- <md-filled-button href="/">Home</md-filled-button> -->
+            <md-filled-button id="button">Home</md-filled-button>
+          </div>
         </div>
       </div>
     </div>
     <p id="copyright" class="text hidetext">&copy; Beeswax Not Yours, Inc.</p>
+    <script src="/components/button/button.js"></script>
     <script type="text/javascript" src="/assets/js/script.js"></script>
-    <script>
-      document.querySelectorAll('.material-btn').forEach((el) => {
-        const ripple = (e) => {
-          el.classList.remove('ripple');
-          el.style.setProperty('--x', e.offsetX + 'px');
-          el.style.setProperty('--y', e.offsetY + 'px');
-          el.classList.add('ripple');
-        };
-        el.addEventListener('mousedown', ripple, false);
-        el.addEventListener('touchstart', ripple, false);
-      });
-    </script>
   </body>
 </html>
