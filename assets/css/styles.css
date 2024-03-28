@@ -1,24 +1,117 @@
+@import url('reset.css');
+
 :root {
-   --md-ref-typeface-plain: 'Outfit';
-   --md-sys-color-primary: #ffb5a0;
-   --md-sys-color-on-primary: #5f1500;
-   --md-sys-color-secondary: #ffb5a0;
- }
+  --md-ref-typeface-plain: 'Outfit';
+  --md-sys-color-primary: #ffb5a0;
+  --md-sys-color-on-primary: #5f1500;
+  --md-sys-color-secondary: #ffb5a0;
+}
 
 * {
-   transition: 0.5s cubic-bezier(0.3, 0, 0, 1);
-   transition-property: margin, height, border-radius, max-width, width;
+  transition: 0.5s cubic-bezier(0.3, 0, 0, 1);
+  transition-property: margin, height, border-radius, max-width, width;
 }
 
 body {
   background-color: #2c1c17;
+  height: 100vh;
+  height: 100lvh;
   /* overflow: hidden; */
 }
 
-body,
-h1,
-p {
-  margin: 0;
+/* Styles for phones */
+@media only screen and (max-width: 480px) {
+  .box {
+    padding: 4vmax;
+  }
+
+  #header {
+    font-size: 4vmax;
+  }
+
+  #subheaderContainer {
+    font-size: 1.5vmax;
+  }
+
+  #copyright {
+    font-size: 1.75vmax;
+  }
+}
+
+/* Styles for landscape-oriented phones */
+@media only screen and (min-width: 481px) and (max-width: 767px) {
+  .box {
+    padding: 5vmax;
+  }
+
+  #header {
+    font-size: 6vmax;
+  }
+
+  #subheaderContainer {
+    font-size: 1.5vmax;
+  }
+
+  #copyright {
+    font-size: 2.125vmax;
+  }
+}
+
+/* Styles for portrait-oriented tablets and small desktops */
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  .box {
+    padding: 5vmax;
+  }
+
+  #header {
+    font-size: 7vmax;
+  }
+
+  #subheaderContainer {
+    font-size: 1.7vmax;
+  }
+
+  #copyright {
+    font-size: 1.875vmax;
+  }
+}
+
+/* Styles for regular desktops and laptops */
+@media only screen and (min-width: 1024px) and (max-width: 1279px) {
+  .box {
+    padding: 5vmax;
+  }
+
+  #header {
+    font-size: 7vmax;
+  }
+
+  #subheaderContainer {
+    font-size: 1.7vmax;
+  }
+
+  #copyright {
+    font-size: 1.5vmax;
+  }
+}
+
+/* Styles for large desktops and high-resolution screens */
+@media only screen and (min-width: 1280px) {
+  .box {
+    padding: 5vmax;
+  }
+
+  #header {
+    font-size: 7vmax;
+  }
+
+  #subheaderContainer {
+    font-size: 1.7vmax;
+  }
+
+  #copyright {
+    font-size: 1.125vmax;
+  }
 }
 
 .text {
@@ -31,7 +124,7 @@ p {
 }
 
 #centered {
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,14 +133,13 @@ p {
 
 .box {
   background-color: #1e100c;
-  border-radius: 2cqw;
-  padding: 5vh;
+  border-radius: 2vmax;
 }
 
 #header {
-  color: #ffb5a0;
-  font-size: 7cqw;
-  padding-bottom: 0.75vh;
+  font-weight: 700;
+  /* width: max-content; */
+  padding-bottom: 1.5vmax;
 }
 
 #header::before {
@@ -55,39 +147,24 @@ p {
   display: block;
   height: 0;
   width: 0;
-  margin-top: calc((1 - 1.5) * 0.5em);
-}
-
-.headerMobile {
-  font-size: 10cqw !important;
+  margin-top: calc((1 - 1.25) * 0.5em);
 }
 
 #subheaderContainer {
   margin: auto;
-  width: 95%;
-  font-size: 1.7cqw;
-  line-height: 0.85;
   text-align: justify;
-  text-align-last: justify;
+  text-align-last: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.subheaderMobile {
-  font-size: 2.45cqw !important;
-}
-
 #copyright {
   font-weight: 200;
-  font-size: 1.125cqw;
   position: fixed;
-  bottom: 1vh;
+  width: max-content;
+  bottom: 1vmax;
   left: 50%;
   transform: translate(-50%, 0);
-}
-
-.copyrightMobile {
-  font-size: 2.5cqw !important;
 }

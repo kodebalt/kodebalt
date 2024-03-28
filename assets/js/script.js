@@ -23,20 +23,7 @@ function revertVisibility() {
   }
 }
 
-function resizeText() {
-  if (window.innerWidth < window.innerHeight - 200) {
-    document.getElementById('header').classList.add('headerMobile');
-    document.getElementById('subheaderContainer').classList.add('subheaderMobile');
-    document.getElementById('copyright').classList.add('copyrightMobile');
-  } else {
-    document.getElementById('header').classList.remove('headerMobile');
-    document.getElementById('subheaderContainer').classList.remove('subheaderMobile');
-    document.getElementById('copyright').classList.remove('copyrightMobile');
-  }
-}
-
 function init(firstRun) {
-  resizeText();
   adjustWidth();
   if (firstRun) {
     revertVisibility();
