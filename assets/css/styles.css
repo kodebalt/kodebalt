@@ -12,11 +12,16 @@
   transition-property: margin, height, border-radius, max-width, width;
 }
 
+html {
+  background-color: #201a18;
+  scrollbar-color: #ffb5a0 transparent;
+  scrollbar-width: thin;
+}
+
 body {
   background-color: #2c1c17;
   height: 100vh;
   height: 100svh;
-  /* overflow: hidden; */
 }
 
 /* Styles for phones */
