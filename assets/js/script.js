@@ -1,3 +1,7 @@
+if (navigator.userAgent.includes("Googlebot")) {
+  document.querySelector("#header").textContent = "Kodebalt";
+}
+
 function getTextWidth(element) {
   var clone = element.cloneNode(true);
   clone.style.position = "absolute";
