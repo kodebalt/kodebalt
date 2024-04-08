@@ -1,5 +1,5 @@
-if (navigator.userAgent.includes("Googlebot")) {
-  document.querySelector("#header").textContent = "Kodebalt";
+if (!navigator.userAgent.includes("Googlebot")) {
+  document.querySelector("#header").textContent = "Page Not Found";
 }
 
 function getTextWidth(element) {
