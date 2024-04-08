@@ -1,4 +1,5 @@
 if (!navigator.userAgent.includes("Googlebot")) {
+  document.title = "Kodebalt: Page Not Found";
   document.querySelector("#header").textContent = "Page Not Found";
   document.querySelector("#subheaderContainer > .text").textContent = "Sorry, but the page you were trying to view does not exist, yet...";
 }
