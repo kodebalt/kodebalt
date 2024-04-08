@@ -1,5 +1,6 @@
 if (!navigator.userAgent.includes("Googlebot")) {
   document.querySelector("#header").textContent = "Page Not Found";
+  document.querySelector("#subheaderContainer > .text").textContent = "Sorry, but the page you were trying to view does not exist, yet...";
 }
 
 function getTextWidth(element) {
