@@ -1,15 +1,9 @@
-import { adjustWidth, revertVisibility } from "./shared.js";
-
-function init(firstRun) {
-  adjustWidth();
-  if (firstRun) {
-    revertVisibility();
-  }
-}
+import { revertVisibility, resizeSubheader } from "./shared.js";
 
 window.addEventListener("load", () => {
-  init(true);
+  revertVisibility();
+  resizeSubheader();
 });
 window.addEventListener("resize", () => {
-  init(false);
+  resizeSubheader();
 });
