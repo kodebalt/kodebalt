@@ -1,0 +1,53 @@
+@import url("styles.css");
+
+#text404 {
+  text-align: center;
+  text-align-last: initial;
+  line-height: initial;
+  font-style: italic;
+  padding-top: 1vmax;
+  font-size: 1.5vmax;
+}
+
+#button {
+  margin-top: 2.5vmax;
+}
+
+/* Styles for phones */
+@media only screen and (max-width: 480px) {
+  #text404 {
+    font-size: 1.25vmax;
+  }
+
+  #button {
+    transform: initial;
+  }
+}
+
+/* Styles for landscape-oriented phones */
+@media only screen and (min-width: 481px) and (max-width: 767px) {
+  #button {
+    transform: initial;
+  }
+}
+
+/* Styles for portrait-oriented tablets and small desktops */
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  #button {
+    transform: scale(1.125);
+  }
+}
+
+/* Styles for regular desktops and laptops */
+@media only screen and (min-width: 1024px) and (max-width: 1279px) {
+  #button {
+    transform: scale(1.25);
+  }
+}
+
+/* Styles for large desktops and high-resolution screens */
+@media only screen and (min-width: 1280px) {
+  #button {
+    transform: scale(1.5);
+  }
+}
